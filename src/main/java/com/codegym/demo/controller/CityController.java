@@ -111,37 +111,4 @@ public class CityController {
         }
         return modelAndView;
     }
-
-    @GetMapping("/productType/list")
-    public ModelAndView showTypeForm(@RequestParam("s")Optional<String> s,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "4") int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<City> products;
-        if (s.isPresent()){
-            products = cityService.findAllByNameContaining(s.get(), pageable);
-        } else {
-            products = cityService.findAll(pageable);
-        }
-        Iterable<Country> types = countryService.getAll();
-        Country productType = new Country();
-        ModelAndView modelAndView = new ModelAndView("countryList");
-        modelAndView.addObject("types", types);
-        modelAndView.addObject("productType", productType);
-        modelAndView.addObject("products", products);
-        return modelAndView;
-    }
-
-    @GetMapping("/productType/list/search")
-    public ModelAndView searchByType(@ModelAttribute("productType") Country productType,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "4") int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<City> products;
-        String typeName = productType.getName();
-        products = cityService.findAllByCountry_Name(productType.getName(), pageable);
-        ModelAndView modelAndView = new ModelAndView("countryList");
-        modelAndView.addObject("products", products);
-        return modelAndView;
-    }
 }
