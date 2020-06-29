@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Product List </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<!--<span th:text="#{listProduct.language}"></span> <a href="?lang=en">English</a> | <a href="?lang=vn">Vietnamese</a>-->
+<br> <h4>Product List </h4>
+<span>
+    <a th:href="@{/city/create}"> Add new city </a><br>
+    <a th:href="@{/city/list}"> All city </a><br>
+    <a th:href="@{/country/list}">Search by Country</a>
+</span>
+<div style="margin: auto; width: 800px">
+    <br>
+    <form style="margin-left: 100px">
+<!--        <span th:text="#{listProduct.search}"></span>-->
+        <input type="text" name="s">
+        <input type="submit" th:value="Search">
+    </form>
+    <br>
+    <table class="table table-striped row" style="margin: auto">
+        <tr>
+            <td th:text="Id" style="width: 100px"></td>
+            <td th:text="City" style="width: 300px"></td>
+            <td th:text="Country" style="width: 200px"></td>
+            <td colspan="2" style="width: 50px; text-align: center">Action</td>
+        </tr>
+
+        <th:block th:each="city : ${cities}">
+            <tr>
+                <td th:text="${city.getId()}" style="width: 200px"></td>
+                <td style="width: 300px">
+                    <a th:href="@{/city/detail/__${city.id}__}" th:text="${city.getName()}" ></a>
+                </td>
+                <td th:text="${city.getCountry().getName()}" style="width: 300px"></td>
+                <td><a th:href="@{/city/edit/__${city.id}__}" >Edit</a></td>
+                <td><a th:href="@{/city/delete/__${city.id}__}" >Delete</a></td>
+            </tr>
+        </th:block>
+    </table>
+    <br>
+<!--    <a th:href="@{/logout}" style="margin-left: 100px" th:text="#{logout}"></a>-->
+</div>
+<div>
+    <a th:href="@{'/city/list'(page=${cities.number - 1})}" th:if="${cities.hasPrevious()}">Previous</a>
+    <span th:text="${cities.number + 1}"></span>/<span th:text="${cities.totalPages}"></span>
+    <a th:href="@{'/city/list'(page=${cities.number + 1})}" th:if="${cities.hasNext()}">Next</a>
+</div>
+
+</body>
+</html>
